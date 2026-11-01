@@ -81,19 +81,59 @@ function wa_link(int $i = 0, string $msg = WA_MENSAJE): string
 
 function foto_valida(?string $f): bool
 {
-    return $f !== null && $f !== '' && strtoupper($f) !== 'NULL';
+    // En la base hay nombres con espacios al final ("foto.jpg  "): se ignoran
+    $f = trim((string) $f);
+    return $f !== '' && strtoupper($f) !== 'NULL';
 }
 
-/** La foto está cargada en la base y el archivo existe (evita imágenes rotas). */
+/**
+ * Archivo real de una foto: la versión grande ("big...") si existe y, si no, la chica que guardó
+ * la intranet. Busca sin distinguir mayúsculas (en la base hay ".JPG" y en el disco ".jpg" y viceversa).
+ */
+function foto_archivo(string $tipo, ?string $f): ?string
+{
+    static $carpetas = [];
+    if (!foto_valida($f)) {
+        return null;
+    }
+    $dir = $tipo === '0km' ? '0km' : 'usados';
+    if (!isset($carpetas[$dir])) {
+        $carpetas[$dir] = [];
+        foreach (@scandir(MEDIA_DIR . 'images/' . $dir) ?: [] as $archivo) {
+            $carpetas[$dir][strtolower($archivo)] = $archivo;
+        }
+    }
+    $f = strtolower(basename(trim($f)));
+    foreach (['big' . $f, $f] as $candidato) {
+        if (isset($carpetas[$dir][$candidato])) {
+            return $carpetas[$dir][$candidato];
+        }
+    }
+    // Según la versión de la intranet que la cargó, el archivo puede tener un prefijo extra
+    // ("Usado...", el número del auto, etc.): se busca uno que termine igual, prefiriendo el grande.
+    if (strlen($f) >= 6) {
+        $parecido = null;
+        foreach ($carpetas[$dir] as $minuscula => $real) {
+            if (substr($minuscula, -strlen($f)) === $f && substr($minuscula, -4) !== '.bak') {
+                if (strpos($minuscula, 'big') === 0) {
+                    return $real;
+                }
+                $parecido = $parecido ?? $real;
+            }
+        }
+        return $parecido;
+    }
+    return null;
+}
+
 function foto_disponible(string $tipo, ?string $f): bool
 {
-    return foto_valida($f)
-        && is_file(MEDIA_DIR . 'images/' . ($tipo === '0km' ? '0km' : 'usados') . '/big' . $f);
+    return foto_archivo($tipo, $f) !== null;
 }
 
 function foto_url(string $tipo, string $f): string
 {
-    return MEDIA . 'images/' . ($tipo === '0km' ? '0km' : 'usados') . '/big' . rawurlencode($f);
+    return MEDIA . 'images/' . ($tipo === '0km' ? '0km' : 'usados') . '/' . rawurlencode(foto_archivo($tipo, $f) ?? 'big' . $f);
 }
 
 // Definición de los dos catálogos: misma lógica, distintos nombres de columnas
