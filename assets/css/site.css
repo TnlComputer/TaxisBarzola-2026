@@ -1,0 +1,191 @@
+@font-face { font-family: 'Titillium Web'; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/titillium-400.woff2) format('woff2'); }
+@font-face { font-family: 'Titillium Web'; font-style: normal; font-weight: 700; font-display: swap; src: url(../fonts/titillium-700.woff2) format('woff2'); }
+
+:root {
+	--oro: #f2c230;
+	--oro-oscuro: #d9a800;
+	--negro: #1c1c1c;
+	--gris-oscuro: #2e2e2e;
+	--fondo: #f4f4f2;
+	--whatsapp: #15803d;
+	--whatsapp-hover: #166534;
+	--bs-body-font-family: 'Titillium Web', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+	--bs-body-bg: var(--fondo);
+}
+
+html { scroll-padding-top: 80px; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.bg-negro { background: var(--negro); }
+.text-oro { color: var(--oro) !important; }
+
+.navbar-brand strong { font-size: 1.35rem; letter-spacing: .5px; }
+.navbar .nav-link { text-transform: uppercase; font-size: .9rem; }
+.navbar .nav-link.active, .navbar .nav-link:hover { color: var(--oro) !important; }
+
+.btn-oro { background: var(--oro); border-color: var(--oro); color: var(--negro); font-weight: 700; }
+.btn-oro:hover, .btn-oro:focus { background: var(--oro-oscuro); border-color: var(--oro-oscuro); color: var(--negro); }
+.btn-whatsapp {
+	background: linear-gradient(135deg, #1fae55, var(--whatsapp));
+	border: 0; color: #fff; font-weight: 700; letter-spacing: .2px;
+	display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+	border-radius: 999px; padding-inline: 1.25em;
+	box-shadow: 0 4px 14px rgba(21, 128, 61, .35);
+	transition: transform .15s, box-shadow .15s, background .15s;
+}
+.btn-whatsapp:hover, .btn-whatsapp:focus-visible, .btn-whatsapp:active {
+	background: linear-gradient(135deg, var(--whatsapp), var(--whatsapp-hover)) !important; color: #fff !important;
+	transform: translateY(-1px); box-shadow: 0 6px 18px rgba(21, 128, 61, .45);
+}
+.icono-wa { flex-shrink: 0; }
+
+/* Portada */
+.hero {
+	background: radial-gradient(circle at 80% 30%, #3a3a3a 0, var(--negro) 60%);
+	padding: 8rem 0 4rem;
+}
+/* Slider con leyendas (como el original): la leyenda se anima cada vez que entra una diapositiva */
+.hero { padding: 6.5rem 0 3rem; }
+.hero-carrusel .carousel-item { min-height: 400px; }
+.leyenda-marca { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; color: var(--oro); line-height: 1; margin-bottom: 1rem; }
+.leyenda-titulo { font-size: clamp(1.35rem, 2.6vw, 2rem); line-height: 1.3; margin-bottom: 1rem; }
+.leyenda-texto { font-size: 1.1rem; color: rgba(255, 255, 255, .75); margin-bottom: 1rem; }
+.leyenda-foto { max-width: 100%; height: auto; max-height: 360px; width: auto; border: 4px solid var(--oro); }
+.carousel-item.active .leyenda > * { animation: subir .6s ease-out both; }
+.carousel-item.active .leyenda > :nth-child(2) { animation-delay: .25s; }
+.carousel-item.active .leyenda > :nth-child(3) { animation-delay: .5s; }
+.carousel-item.active .leyenda > :nth-child(4) { animation-delay: .75s; }
+.carousel-item.active .leyenda-media { animation: entrar-derecha .8s .4s ease-out both; }
+@keyframes entrar-derecha { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: none; } }
+.hero-carrusel .carousel-control-prev, .hero-carrusel .carousel-control-next { width: 3rem; }
+.hero-carrusel .carousel-indicators { margin-bottom: -2rem; }
+/* Flechas e indicadores se ocultan si no se usan y aparecen al pasar el mouse o al navegar con teclado */
+.hero-carrusel .carousel-control-prev, .hero-carrusel .carousel-control-next,
+.hero-carrusel .carousel-indicators, #galeria .carousel-control-prev, #galeria .carousel-control-next {
+	opacity: 0; transition: opacity .3s;
+}
+.hero-carrusel:hover .carousel-control-prev, .hero-carrusel:hover .carousel-control-next, .hero-carrusel:hover .carousel-indicators,
+.hero-carrusel:focus-within .carousel-control-prev, .hero-carrusel:focus-within .carousel-control-next, .hero-carrusel:focus-within .carousel-indicators,
+#galeria:hover .carousel-control-prev, #galeria:hover .carousel-control-next,
+#galeria:focus-within .carousel-control-prev, #galeria:focus-within .carousel-control-next { opacity: .9; }
+/* En pantallas táctiles (sin mouse) los indicadores quedan tenues para saber que hay más fotos */
+@media (hover: none) { .hero-carrusel .carousel-indicators { opacity: .5; } }
+@media (min-width: 992px) {
+	.hero-carrusel .carousel-item { padding: 0 3rem; }
+}
+@media (max-width: 991.98px) {
+	.hero-carrusel .carousel-item { min-height: 540px; }
+	.leyenda-foto { max-height: 200px; }
+	.hero-carrusel .carousel-control-prev, .hero-carrusel .carousel-control-next { display: none; }
+}
+.hero-cta { padding-top: 1.5rem; }
+
+/* Logo del menú: entrada escalonada (como el sitio original, más rápida) */
+.navbar-brand img { animation: entrar-derecha .7s .5s ease-out both; }
+.navbar-brand strong { display: inline-block; animation: entrar-izquierda .7s ease-out both; }
+.navbar-brand small { display: inline-block; animation: subir .7s .25s ease-out both; }
+@keyframes entrar-izquierda { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: none; } }
+
+.revelar { transition: opacity .6s ease-out, transform .6s ease-out; }
+.revelar.oculto { opacity: 0; transform: translateY(30px); }
+.btn-whatsapp.btn-lg { animation: latido 2.5s 2s ease-in-out 2; }
+@keyframes latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+.hero-foto { width: 100%; max-width: 291px; height: auto; border: 4px solid var(--oro); }
+@media (max-width: 991.98px) { .hero-foto { max-width: 200px; } }
+.confianza { background: var(--oro); color: var(--negro); font-size: .95rem; }
+.contenedor-angosto { max-width: 860px; }
+
+/* Cómo funciona */
+.paso { background: var(--fondo); border-radius: 1rem; padding: 1.75rem 1.5rem; position: relative; }
+.paso-num { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--negro); color: var(--oro); font-weight: 700; font-size: 1.25rem; margin-bottom: .75rem; }
+
+.nav-pills .nav-link { color: var(--negro); font-weight: 700; }
+.nav-pills .nav-link.active { background: var(--negro); color: var(--oro); }
+.accordion-button:not(.collapsed) { background: #fff8dc; color: var(--negro); }
+.accordion-button:focus { box-shadow: 0 0 0 .25rem rgba(242, 194, 48, .4); }
+
+.titulo-seccion { font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem; position: relative; padding-bottom: .5rem; }
+.titulo-seccion::after { content: ''; position: absolute; left: 0; bottom: 0; width: 60px; height: 4px; background: var(--oro); }
+
+.seccion-oscura { background: var(--gris-oscuro); }
+
+.lista-check li { position: relative; padding-left: 2rem; margin-bottom: .75rem; font-weight: 600; }
+.lista-check li::before {
+	content: '';
+	position: absolute; left: 0; top: .2rem;
+	width: 1.25rem; height: 1.25rem; border-radius: 50%;
+	background: var(--oro) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%231c1c1c' stroke-width='2.5' d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E") center / 70% no-repeat;
+}
+.lista-clara li { color: #fff3b0; }
+
+/* Tarjetas de autos */
+.tarjeta-auto { border: 0; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, .06); transition: transform .2s, box-shadow .2s; }
+.tarjeta-auto:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0, 0, 0, .12); }
+.tarjeta-auto .card-img-top { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: #ddd; }
+.tarjeta-auto a:has(.sin-foto), .tarjeta-auto a .sin-foto { text-decoration: none; }
+.sin-foto { display: flex; align-items: center; justify-content: center; color: #888; }
+
+/* Detalle */
+#galeria .carousel-item img { height: auto; aspect-ratio: 4 / 3; object-fit: contain; }
+.miniaturas button { flex: 0 0 auto; border: 2px solid transparent; padding: 0; border-radius: .5rem; overflow: hidden; background: none; opacity: .6; }
+.miniaturas button.active, .miniaturas button:hover { border-color: var(--oro); opacity: 1; }
+.miniaturas img { width: 80px; height: 60px; object-fit: cover; display: block; }
+
+/* Fotos históricas */
+.foto { display: block; border-radius: .75rem; overflow: hidden; }
+.foto img { height: auto; aspect-ratio: 4 / 3; object-fit: cover; width: 100%; transition: transform .3s; }
+.foto:hover img { transform: scale(1.05); }
+
+.visor { border: 0; padding: 1rem; background: transparent; max-width: 95vw; max-height: 95vh; }
+.visor::backdrop { background: rgba(0, 0, 0, .9); }
+.visor img { max-width: 90vw; max-height: 80vh; display: block; margin: auto; border-radius: .5rem; }
+.visor-cerrar { position: absolute; top: 0; right: 0; }
+
+/* Pie */
+.pie { background: var(--negro); }
+.pie-copy { background: #000; }
+.login-oculto { color: #000; text-decoration: none; }
+
+/* Botón flotante de WhatsApp: círculo con halo suave y etiqueta que se muestra al entrar y al pasar el mouse */
+.wa-flotante {
+	position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 1030;
+	align-items: center; gap: .75rem; text-decoration: none;
+}
+.wa-circulo {
+	position: relative; width: 64px; height: 64px; border-radius: 50%;
+	display: flex; align-items: center; justify-content: center; color: #fff;
+	background: radial-gradient(circle at 30% 30%, #34d870, #1fae55 60%, var(--whatsapp));
+	box-shadow: 0 8px 24px rgba(21, 128, 61, .45);
+	transition: transform .2s;
+}
+.wa-circulo::after {
+	content: ''; position: absolute; inset: 0; border-radius: 50%;
+	border: 2px solid #25d366; animation: halo 2.4s ease-out infinite;
+}
+@keyframes halo { from { transform: scale(1); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
+.wa-etiqueta {
+	background: #fff; color: var(--negro); padding: .5rem .9rem; border-radius: 999px;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, .18); font-size: .95rem; white-space: nowrap;
+	opacity: 0; transform: translateX(10px); pointer-events: none; transition: opacity .25s, transform .25s;
+	animation: etiqueta 6s 2.5s ease-in-out 1;
+}
+.wa-etiqueta strong { color: var(--whatsapp); }
+@keyframes etiqueta { 0%, 100% { opacity: 0; transform: translateX(10px); } 10%, 85% { opacity: 1; transform: none; } }
+.wa-flotante:hover .wa-etiqueta, .wa-flotante:focus-visible .wa-etiqueta { opacity: 1; transform: none; animation: none; }
+.wa-flotante:hover .wa-circulo { transform: scale(1.08); }
+
+/* Barra fija de WhatsApp en celulares */
+.barra-wa {
+	position: fixed; left: 0; right: 0; bottom: 0; z-index: 1030;
+	padding: .6rem .9rem calc(.6rem + env(safe-area-inset-bottom));
+	background: linear-gradient(to top, rgba(20, 20, 20, .97), rgba(20, 20, 20, .85));
+	backdrop-filter: blur(6px); border-top: 1px solid rgba(255, 255, 255, .08);
+}
+@media (max-width: 991.98px) { body { padding-bottom: 4.5rem; } }
+
+:focus-visible { outline: 3px solid var(--oro); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+/* En celulares el botón del hero sobra: la barra fija de abajo ya lo ofrece */
+@media (max-width: 991.98px) { .hero-cta .btn-whatsapp { display: none; } }

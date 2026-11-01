@@ -1,0 +1,94 @@
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW HOTLINKID:WhWMty
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://taxisbarzola.com.ar/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://taxisbarzola.com.ar/$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.taxisbarzola.com.ar/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.taxisbarzola.com.ar/$      [NC]
+RewriteRule .*\.(.*)$ https://www.taxisbarzola.com.ar [R,NC]
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE application/javascript
+AddCharset UTF-8 .php
+AddCharset ISO-8859-1 .html
+ExpiresActive On
+ExpiresByType image/gif "access plus 6 months"
+ExpiresByType image/jpeg "access plus 6 months"
+ExpiresByType image/png "access plus 6 months"
+ExpiresByType text/css "access plus 6 months"
+ExpiresByType text/javascript "access plus 6 months"
+ExpiresByType application/javascript "access plus 6 months"
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE WhWMty:HOTLINKID
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Configure el paquete “ea-php83” como el lenguaje de programación predeterminado “PHP”.
+<IfModule mime_module>
+  AddType application/x-httpd-ea-php83 .php .php7 .phtml
+
+# ==== Taxis Barzola 2026: landing en la raíz + intranet ====
+Options -Indexes
+ServerSignature Off
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+# HTTPS obligatorio desde el servidor
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Páginas públicas viejas -> sus equivalentes en la landing (permanente, conserva Google y links compartidos)
+RewriteRule ^cv\.php$ /#permuta [R=301,L,NE]
+RewriteRule ^ok\.php$ /nuevos.php [R=301,L]
+RewriteRule ^usa\.php$ /usados.php [R=301,L]
+RewriteRule ^lic\.php$ /#licencias [R=301,L,NE]
+RewriteRule ^cont\.php$ /#contacto [R=301,L,NE]
+RewriteRule ^fot\.php$ /#fotos [R=301,L,NE]
+RewriteRule ^0kmDetalles\.php$ /nuevos.php [R=301,L]
+RewriteRule ^[Uu]sadosDetalles\.php$ /usados.php [R=301,L]
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Carpetas y archivos internos que no se sirven
+RewriteRule ^(inc|herramientas|Connections|datos)(/|$) - [F,L]
+RedirectMatch 404 (?i)/(\.git|_notes)(/|$)
+<FilesMatch "(?i)(^error_log$|\.(bak|sql|log|ini|md|old|orig|swp)$|^\.ht|^LICENSE$|^dwsync\.xml$)">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>
+
+<IfModule mod_mime.c>
+	AddType font/woff2 .woff2
+	AddType image/webp .webp
+	AddType image/svg+xml .svg
+	AddType video/mp4 .mp4
+</IfModule>
+
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_headers.c>
+	# Recursos de la landing: versionados automáticamente (?v=), caché de 1 año
+	<If "%{REQUEST_URI} =~ m#^/assets/#">
+		Header set Cache-Control "public, max-age=31536000, immutable"
+	</If>
+
+	Header always set Strict-Transport-Security "max-age=31536000"
+	Header always set X-Content-Type-Options "nosniff"
+	Header always set X-Frame-Options "SAMEORIGIN"
+	Header always set Referrer-Policy "strict-origin-when-cross-origin"
+	Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+	Header unset X-Powered-By
+
+	# Política estricta solo para las páginas de la landing (la intranet usa scripts que la romperían)
+	<If "%{REQUEST_URI} =~ m#^/(index\.php|nuevos\.php|usados\.php|detalle\.php)?$#">
+		Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+	</If>
+</IfModule>

@@ -1,0 +1,13 @@
+# Datos privados: nunca se publican
+Connections/conexion.local.php
+Connections/credenciales.php
+inc/entorno.php
+sitio.local.php
+datos/
+*.sql
+*.log
+error_log
+# Fotos personales de los usuarios de la intranet
+usuarios/imgUser/*
+!usuarios/imgUser/.htaccess
+!usuarios/imgUser/sinfoto.jpg
