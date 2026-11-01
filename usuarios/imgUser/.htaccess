@@ -1,5 +1,4 @@
 # Carpeta de imágenes y archivos subidos: nunca ejecutar programas
-Options -Indexes -ExecCGI
 <FilesMatch "(?i)\.(php\d?|phtml|phar|pht|pl|py|cgi|sh|shtml|asp|aspx|jsp)$">
 	<IfModule mod_authz_core.c>
 		Require all denied
@@ -9,8 +8,6 @@ Options -Indexes -ExecCGI
 		Deny from all
 	</IfModule>
 </FilesMatch>
-RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar
-RemoveType .php .phtml .php3 .php4 .php5 .php7 .phar
 <IfModule mod_headers.c>
 	Header set X-Content-Type-Options "nosniff"
 </IfModule>
